@@ -1,11 +1,13 @@
 // Enemies our player must avoid
-var Enemy = function() {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
-
+let Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
+    this.x = -50;
+    //random y starting position on the screen
+    this.y = (Math.random() * 330);
+    //random speed
+    this.speed  = Math.floor(Math.random() * 290);
 };
 
 // Update the enemy's position, required method for game
@@ -14,6 +16,11 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    if(this.x>=500){
+      this.x=-50;
+      this.y = (Math.random() * 330);
+    }
+    this.x = this.x + this.speed * dt;
 };
 
 // Draw the enemy on the screen, required method for game
@@ -25,11 +32,46 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 
+let Player = function (x, y) {
+  this.sprite = 'images/char-pink-girl.png';
+  this.x = x;
+  this.y = y;
+};
+
+Player.prototype.update = function (dt){
+
+};
+
+Player.prototype.render = function () {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+
+};
+
+Player.prototype.handleInput = function (move){
+  //83=width of a column, 101=height of a column*/
+  //moving player ensuring it doesn't go offscreen
+if (move === 'left' && this.x >= 83) {
+  this.x = this.x - 101;
+}
+else if (move === 'right' && this.x <= 400){
+  this.x = this.x + 101;
+}
+else if (move === 'up' && this.y >= 50){
+  this.y = this.y - 83;
+}
+else if (move === 'down' && this.y <= 350){
+  this.y = this.y + 83;
+}
+};
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-
+const enemy1 = new Enemy();
+const enemy2 = new Enemy();
+const enemy3 = new Enemy();
+const allEnemies = [enemy1, enemy2, enemy3];
+const player = new Player(205,400);
 
 
 // This listens for key presses and sends the keys to your
