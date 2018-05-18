@@ -15,25 +15,31 @@ let Enemy = function() {
 Enemy.prototype.update = function(dt) {
     //when enemy goes offscreen restart from the left of the gameboard
     if (this.x >= 500) {
-      this.x = -50;
-      this.y = (Math.random() * 330);
-      this.speed  = Math.floor(50 + Math.random() * 290);
+      this.reset();
     }
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x = this.x + this.speed * dt;
 
-    this.collision(player);
+    //If player reaches the water, stop the Enemies
+
+
+    this.checkCollision(player);
 };
 
+Enemy.prototype.reset = function () {
+  this.x = -50;
+  this.y = (Math.random() * 330);
+  this.speed  = Math.floor(50 + Math.random() * 290);
+}
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 //Check if the enemy collides with the player
-Enemy.prototype.collision = function(player) {
+Enemy.prototype.checkCollision = function(player) {
     if (this.x > player.x - 60 &&
         this.x < player.x + 60 &&
         this.y > player.y - 60 &&
@@ -69,13 +75,36 @@ Player.prototype.handleInput = function (move){
     else if (move === 'right' && this.x <= 400) {
         this.x = this.x + 101;
     }
-    else if (move === 'up' && this.y >= 50) {
+    else if (move === 'up') {
         if (this.y > 80) {
             this.y = this.y - 83;
         }
         else {
-          //if reaches water then reset position
-            this.reset();
+          enemy1.speed = 0;
+          enemy2.speed = 0;
+          enemy3.speed = 0;
+          //if reaches water then show winner modal
+            const winnerModal = document.getElementById('winnerModal');
+            winnerModal.style.display = "block";
+
+            /*function to close the winner the modal and reset the game*/
+            let closeSpan = document.querySelector('.close');
+            closeSpan.onclick = function() {
+                winnerModal.style.display = "none";
+                player.reset();
+                enemy1.reset();
+                enemy2.reset();
+                enemy3.reset();
+            };
+
+            //Start new game when clicking on button inside modal
+            document.querySelector(".restartButton").addEventListener("click", function(){
+            	 winnerModal.style.display = "none";
+               player.reset();
+               enemy1.reset();
+               enemy2.reset();
+               enemy3.reset();
+            });
         }
     }
     else if (move === 'down' && this.y <= 350) {
