@@ -22,13 +22,10 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     this.x = this.x + this.speed * dt;
 
-    //If player reaches the water, stop the Enemies
-
-
     this.checkCollision(player);
 };
 
-Enemy.prototype.reset = function () {
+Enemy.prototype.reset = function() {
   this.x = -50;
   this.y = (Math.random() * 330);
   this.speed  = Math.floor(50 + Math.random() * 290);
@@ -38,21 +35,19 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-//Check if the enemy collides with the player
+//Check if the enemy collides with the player and restart the game
 Enemy.prototype.checkCollision = function(player) {
     if (this.x > player.x - 60 &&
         this.x < player.x + 60 &&
         this.y > player.y - 60 &&
         this.y < player.y + 60) {
-          //if collides restart the game
             player.reset();
         };
 }
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-
-let Player = function (x, y) {
+let Player = function(x, y) {
     this.sprite = 'images/char-pink-girl.png';
     this.x = x;
     this.y = y;
@@ -62,11 +57,11 @@ Player.prototype.update = function (dt){
 
 };
 
-Player.prototype.render = function () {
+Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-Player.prototype.handleInput = function (move){
+Player.prototype.handleInput = function(move) {
     //83=width of a column, 101=height of a column*/
     //moving player ensuring it doesn't go offscreen
     if (move === 'left' && this.x >= 83) {
@@ -80,10 +75,12 @@ Player.prototype.handleInput = function (move){
             this.y = this.y - 83;
         }
         else {
-          enemy1.speed = 0;
-          enemy2.speed = 0;
-          enemy3.speed = 0;
-          //if reaches water then show winner modal
+            //If player reaches the water, stop the Enemies
+            enemy1.speed = 0;
+            enemy2.speed = 0;
+            enemy3.speed = 0;
+
+            //if reaches water then show winner modal
             const winnerModal = document.getElementById('winnerModal');
             winnerModal.style.display = "block";
 
@@ -98,7 +95,7 @@ Player.prototype.handleInput = function (move){
             };
 
             //Start new game when clicking on button inside modal
-            document.querySelector(".restartButton").addEventListener("click", function(){
+            document.querySelector(".restartButton").addEventListener("click", function() {
             	 winnerModal.style.display = "none";
                player.reset();
                enemy1.reset();
@@ -113,7 +110,7 @@ Player.prototype.handleInput = function (move){
 };
 
 //reset the player position
-Player.prototype.reset = function () {
+Player.prototype.reset = function() {
     this.x = 205;
     this.y = 400;
 }

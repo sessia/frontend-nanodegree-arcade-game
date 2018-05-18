@@ -27,7 +27,7 @@ body {
     width: 80%;
 }
 
-.close, .closeLoser {
+.close {
     color: #000;
     float: right;
     font-size: 28px;
@@ -35,9 +35,7 @@ body {
 }
 
 .close:hover,
-.close:focus,
-.closeLoser:hover,
-.closeLoser:focus {
+.close:focus {
     color: #c00;
     text-decoration: none;
     cursor: pointer;
